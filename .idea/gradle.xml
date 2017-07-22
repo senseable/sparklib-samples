@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/CigaretteCounter" />
+            <option value="$PROJECT_DIR$/CigaretteNotifier" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

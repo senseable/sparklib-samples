@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Cigarette Notifier</string>
+    <string name="title">you had a cigarette</string>
+    <plurals name="cigToday">
+        <item quantity="one">%d cigarette today</item>
+        <item quantity="other">%d cigarettes today</item>
+    </plurals>
+</resources>
