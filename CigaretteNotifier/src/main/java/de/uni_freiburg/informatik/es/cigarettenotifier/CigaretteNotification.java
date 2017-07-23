@@ -1,12 +1,13 @@
 package de.uni_freiburg.informatik.es.cigarettenotifier;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
-import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.os.IBinder;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 
@@ -18,13 +19,13 @@ import java.util.List;
 import eu.senseable.sparklib.Spark;
 
 /**
- *  This Activity creates a Notification to show the user that a new cigarette event
- *  was detected.
+ * This in a service, so it will be running as long as the notification is visible.
  *
- * Created by phil on 22.07.17.
+ * Created by phil on 23.07.17.
  */
 
-public class CigaretteNotifier extends Activity {
+public class CigaretteNotification extends Service {
+
     private static final int NOTIFICATION_ID = 123;
     private Spark mSpark;
 
@@ -73,35 +74,44 @@ public class CigaretteNotifier extends Activity {
             /**
              * return if there are no events today
              */
-            if (events.size() == 0) {
+            if (num == 0) {
                 mNotificationManager.cancel(NOTIFICATION_ID);
                 return;
             }
 
             Notification notification = new NotificationCompat
-                .Builder(CigaretteNotifier.this)
-                .setSmallIcon(R.drawable.ic_cig)
-                .setContentTitle(res.getString(R.string.title))
-                .setContentText(res.getQuantityString(R.plurals.cigToday, num, num))
-                .setWhen(latest)
-                .setShowWhen(true)
-                .setAutoCancel(true)
-                .setDefaults(newEvent ? Notification.DEFAULT_ALL : 0)
-                .build();
+                    .Builder(CigaretteNotification.this)
+                    .setSmallIcon(R.drawable.ic_cig)
+                    .setContentTitle(res.getString(R.string.title))
+                    .setContentText(res.getQuantityString(R.plurals.cigToday, num, num))
+                    .setWhen(latest)
+                    .setShowWhen(true)
+                    .setAutoCancel(true)
+                    .setDefaults(newEvent ? Notification.DEFAULT_ALL : 0)
+                    .build();
 
             mNotificationManager.notify(NOTIFICATION_ID, notification);
         }
     };
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        mSpark = new Spark(this, mSparkCallbacks);
-        super.onCreate(savedInstanceState);
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        finish(); // this remove all UI, but keeps the Spark connection running
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (mSpark != null)  // make sure there is only a single connection!
+            mSpark.close(this);
+
+        mSpark = new Spark(this, mSparkCallbacks);
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSpark.close(this);
     }
 }

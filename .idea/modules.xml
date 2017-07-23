@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CigTrack.iml" filepath="$PROJECT_DIR$/CigTrack.iml" />
       <module fileurl="file://$PROJECT_DIR$/CigaretteCounter/CigaretteCounter.iml" filepath="$PROJECT_DIR$/CigaretteCounter/CigaretteCounter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/CigaretteCounter/CigaretteCounter.iml" filepath="$PROJECT_DIR$/CigaretteCounter/CigaretteCounter.iml" />
       <module fileurl="file://$PROJECT_DIR$/CigaretteNotifier/CigaretteNotifier.iml" filepath="$PROJECT_DIR$/CigaretteNotifier/CigaretteNotifier.iml" />
       <module fileurl="file://$PROJECT_DIR$/sparklib-samples.iml" filepath="$PROJECT_DIR$/sparklib-samples.iml" />
     </modules>
